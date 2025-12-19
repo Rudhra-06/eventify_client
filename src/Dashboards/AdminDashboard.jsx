@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import adminBg from "../assets/adminbg.png"; // make sure the path is correct
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -61,7 +62,17 @@ const AdminDashboard = () => {
   };
 
   return (
-    <div className="p-10 min-h-screen bg-beige-50 text-orange-50">
+    <div className="relative min-h-screen p-10 text-orange-50 overflow-hidden">
+      
+      {/* BACKGROUND IMAGE */}
+      <div
+        className="absolute inset-0 bg-cover bg-center -z-10"
+        style={{ backgroundImage: `url(${adminBg})` }}
+      />
+      
+      {/* DARK OVERLAY */}
+      <div className="absolute inset-0 bg-black/40 -z-10"></div>
+
       <h2 className="text-3xl font-extrabold mb-8 text-center text-orange-200 tracking-wide">
         Admin Dashboard
       </h2>
@@ -72,8 +83,8 @@ const AdminDashboard = () => {
           onClick={() => setView("manage")}
           className={`px-6 py-2 rounded font-medium transition-colors duration-200 ${
             view === "manage"
-              ? "px-6 py-2 rounded bg-black text-orange-50 hover:bg-orange-200 hover:text-black transition-colors duration-200 font-medium"
-              : "px-6 py-2 rounded bg-black text-orange-50 hover:bg-orange-200 hover:text-black transition-colors duration-200 font-medium"
+              ? "bg-black text-orange-50 hover:bg-orange-200 hover:text-black"
+              : "bg-black text-orange-50 hover:bg-orange-200 hover:text-black"
           }`}
         >
           Manage Events
@@ -98,7 +109,9 @@ const AdminDashboard = () => {
             events.map((event) => (
               <div
                 key={event._id}
-                className="bg-black p-5 rounded-xl shadow flex flex-col gap-3"
+                className="bg-black/90 p-5 rounded-xl shadow-lg flex flex-col gap-3
+                           transition-transform duration-300 ease-in-out
+                           hover:-translate-y-2 hover:shadow-[0_0_20px_rgba(255,215,0,0.5)]"
               >
                 {editingId === event._id ? (
                   <>
@@ -134,10 +147,16 @@ const AdminDashboard = () => {
                     </h3>
                     <p className="text-black/70">{event.description}</p>
                     <div className="flex gap-2 mt-auto">
-                      <button className="bg-yellow-400 text-black px-3 py-1 rounded hover:bg-yellow-300 transition-colors duration-200" onClick={() => startEdit(event)}>
+                      <button
+                        className="bg-yellow-400 text-black px-3 py-1 rounded hover:bg-yellow-300 transition-colors duration-200"
+                        onClick={() => startEdit(event)}
+                      >
                         Edit
                       </button>
-                      <button className="bg-red-500 text-orange-50 px-3 py-1 rounded hover:bg-red-400 transition-colors duration-200" onClick={() => deleteEvent(event._id)}>
+                      <button
+                        className="bg-red-500 text-orange-50 px-3 py-1 rounded hover:bg-red-400 transition-colors duration-200"
+                        onClick={() => deleteEvent(event._id)}
+                      >
                         Delete
                       </button>
                     </div>

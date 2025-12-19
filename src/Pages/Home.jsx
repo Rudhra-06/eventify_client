@@ -1,3 +1,5 @@
+import homebg from "../assets/homebg.mp4"
+
 const Home = () => {
   return (
     <div className="relative w-full h-screen bg-beige-50 overflow-hidden flex items-center justify-center text-center">
@@ -6,9 +8,9 @@ const Home = () => {
         autoPlay
         loop
         muted
-        className="absolute w-full h-full object-cover -z-10 filter blur-xs opacity-95"
+        className="absolute w-full h-full object-cover -z-10 filter opacity-95"
       >
-        <source src="https://cdn.pixabay.com/video/2024/08/09/225661_tiny.mp4" type="video/mp4" />
+        <source src={homebg} type="video/mp4" />
         Your browser does not support the video tag.
       </video>
 

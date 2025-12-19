@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
+import loginBg from "../assets/loginbg.png"; // make sure the path is correct
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -45,8 +46,19 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-beige-50">
-      <div className="bg-black/80 p-8 rounded-xl shadow-lg w-96 backdrop-blur-md">
+    <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
+
+      {/* BACKGROUND IMAGE */}
+      <div
+        className="absolute inset-0 bg-cover bg-center -z-10"
+        style={{ backgroundImage: `url(${loginBg})` }}
+      />
+
+      {/* LIGHT BLACK OVERLAY */}
+      <div className="absolute inset-0 bg-black/40 -z-10"></div>
+
+      {/* LOGIN CARD */}
+      <div className="bg-black/80 p-8 rounded-xl shadow-lg w-96 backdrop-blur-md relative left-10">
         <h2 className="text-3xl font-extrabold text-orange-200 text-center mb-6">
           Login
         </h2>

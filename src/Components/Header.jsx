@@ -3,6 +3,9 @@ import { Link, useNavigate } from "react-router-dom";
 const Header = () => {
   const navigate = useNavigate();
 
+  // Get the user's role from localStorage
+  const role = localStorage.getItem("role");
+
   const logout = () => {
     localStorage.clear();
     navigate("/login");
@@ -29,7 +32,15 @@ const Header = () => {
           Events
         </Link>
 
-        {/* <Link to="/create">Create</Link> */}
+        {/* Show Create Event only if role is admin */}
+        {role === "admin" && (
+          <Link
+            to="/create"
+            className="text-orange-50 hover:text-orange-300 transition-colors duration-200"
+          >
+            Create Event
+          </Link>
+        )}
 
         <button
           onClick={logout}
@@ -43,4 +54,3 @@ const Header = () => {
 };
 
 export default Header;
-
