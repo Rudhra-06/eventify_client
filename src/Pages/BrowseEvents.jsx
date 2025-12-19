@@ -12,7 +12,7 @@ const BrowseEvents = () => {
 
   const fetchEvents = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/events");
+      const res = await axios.get("https://eventify-server-nv2g.onrender.com/api/events");
       setEvents(res.data);
     } catch (err) {
       console.log(err);
@@ -38,7 +38,7 @@ const BrowseEvents = () => {
     if (!window.confirm("Are you sure you want to delete this event?")) return;
 
     try {
-      await axios.delete(`http://localhost:5000/api/events/delete/${id}`, {
+      await axios.delete(`https://eventify-server-nv2g.onrender.com/api/events/delete/${id}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -57,7 +57,7 @@ const BrowseEvents = () => {
 
     try {
       await axios.put(
-        `http://localhost:5000/api/events/update/${event._id}`,
+        `https://eventify-server-nv2g.onrender.com/api/events/update/${event._id}`,
         { title: newTitle, description: newDescription },
         {
           headers: {

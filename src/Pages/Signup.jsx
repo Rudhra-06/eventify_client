@@ -18,7 +18,7 @@ const Signup = () => {
 
   const signup = async () => {
     try {
-      await axios.post("http://localhost:5000/api/auth/signup", form);
+      await axios.post("https://eventify-server-nv2g.onrender.com/api/auth/signup", form);
       alert("Signup successful! Please login.");
       navigate("/login");
     } catch (err) {

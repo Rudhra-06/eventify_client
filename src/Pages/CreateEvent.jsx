@@ -11,7 +11,7 @@ const CreateEvent = () => {
     try {
       const token = localStorage.getItem("token");
       const res = await axios.post(
-        "http://localhost:5000/api/events/create",
+        "https://eventify-server-nv2g.onrender.com/api/events/create",
         { title, description },
         { headers: { Authorization: `Bearer ${token}` } }
       );
