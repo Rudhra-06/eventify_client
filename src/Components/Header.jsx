@@ -3,7 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 const Header = () => {
   const navigate = useNavigate();
 
-  // Get the user's role from localStorage
+  // Read both token and role — token presence confirms login
+  const token = localStorage.getItem("token");
   const role = localStorage.getItem("role");
 
   const logout = () => {
@@ -32,8 +33,8 @@ const Header = () => {
           Events
         </Link>
 
-        {/* Show My Events only for logged-in non-admin users */}
-        {role === "user" && (
+        {/* Show My Events for any logged-in non-admin user */}
+        {token && role !== "admin" && (
           <Link
             to="/myevents"
             className="text-orange-50 hover:text-orange-300 transition-colors duration-200"

@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
@@ -8,15 +8,15 @@ const MyEvents = () => {
   const token = localStorage.getItem("token");
   const user = localStorage.getItem("name") || localStorage.getItem("email") || "Guest";
 
-  if (!token) {
-    navigate("/login");
-    return null;
-  }
-
   const bookedEvents = JSON.parse(localStorage.getItem("bookedEvents") || "[]");
 
   const [selectedEvent, setSelectedEvent] = useState(null);
   const ticketRef = useRef(null);
+
+  // Redirect to login if not authenticated
+  useEffect(() => {
+    if (!token) navigate("/login");
+  }, [token, navigate]);
 
   const handleDownloadTicket = async (eventName) => {
     if (!ticketRef.current) return;
