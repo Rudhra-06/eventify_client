@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 
 const generateBookingId = () =>
   "EVT-" + Math.floor(100000 + Math.random() * 900000);
@@ -47,16 +48,47 @@ const Payment = () => {
     setTimeout(() => {
       setLoading(false);
       setPaid(true);
+      // Persist booking to localStorage for MyEvents page
+      const existing = JSON.parse(localStorage.getItem("bookedEvents") || "[]");
+      const alreadySaved = existing.find((e) => e.eventId === state.eventId);
+      if (!alreadySaved) {
+        const newBooking = {
+          eventId: state.eventId,
+          eventName,
+          eventDate,
+          eventLocation,
+          price,
+          bookingId,
+          paymentStatus: "Paid",
+          bookedAt: new Date().toISOString(),
+        };
+        localStorage.setItem("bookedEvents", JSON.stringify([...existing, newBooking]));
+      }
     }, 2000);
   };
 
-  const handleDownload = async () => {
+  const handleDownloadTicket = async () => {
     if (!ticketRef.current) return;
-    const canvas = await html2canvas(ticketRef.current, { scale: 2 });
-    const link = document.createElement("a");
-    link.download = `${bookingId}.png`;
-    link.href = canvas.toDataURL();
-    link.click();
+
+    const canvas = await html2canvas(ticketRef.current, { scale: 2, useCORS: true });
+    const imgData = canvas.toDataURL("image/png");
+
+    const pdf = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
+
+    const pageWidth = pdf.internal.pageSize.getWidth();   // 210 mm
+    const pageHeight = pdf.internal.pageSize.getHeight(); // 297 mm
+
+    // Scale ticket to fit 80% of page width, keep aspect ratio
+    const ticketW = pageWidth * 0.8;
+    const ticketH = (canvas.height / canvas.width) * ticketW;
+
+    const x = (pageWidth - ticketW) / 2;
+    const y = (pageHeight - ticketH) / 2;
+
+    pdf.addImage(imgData, "PNG", x, y, ticketW, ticketH);
+
+    const safeName = eventName.toLowerCase().replace(/\s+/g, "_");
+    pdf.save(`event_ticket_${safeName}.pdf`);
   };
 
   return (
@@ -175,6 +207,7 @@ const Payment = () => {
             <p className="text-center text-green-400 text-2xl font-extrabold">✅ Payment Successful!</p>
 
             <div
+              id="ticket"
               ref={ticketRef}
               className="bg-white text-gray-900 rounded-2xl shadow-2xl overflow-hidden"
               style={{ fontFamily: "monospace" }}
@@ -243,10 +276,10 @@ const Payment = () => {
             {/* Actions */}
             <div className="flex gap-4">
               <button
-                onClick={handleDownload}
+                onClick={handleDownloadTicket}
                 className="flex-1 py-3 bg-orange-400 text-black font-bold rounded-xl hover:bg-orange-300 transition"
               >
-                Download Ticket
+                Download Ticket as PDF
               </button>
               <button
                 onClick={() => navigate("/browse")}

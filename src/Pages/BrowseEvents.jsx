@@ -8,9 +8,6 @@ const BrowseEvents = () => {
   const navigate = useNavigate();
 
   const [events, setEvents] = useState([]);
-  const [bookedEvents, setBookedEvents] = useState([]);
-  const [showPopup, setShowPopup] = useState(false);
-  const [showPanel, setShowPanel] = useState(false);
 
   const fetchEvents = async () => {
     try {
@@ -26,25 +23,18 @@ const BrowseEvents = () => {
   }, []);
 
   const handleBookEvent = (event) => {
-    const alreadyBooked = bookedEvents.find((e) => e._id === event._id);
-    if (alreadyBooked) return;
+    const existing = JSON.parse(localStorage.getItem("bookedEvents") || "[]");
+    if (existing.find((e) => e.eventId === event._id)) return;
 
-    setBookedEvents([...bookedEvents, event]);
-    setShowPopup(true);
-    setShowPanel(true);
-
-    setTimeout(() => {
-      setShowPopup(false);
-      navigate("/payment", {
-        state: {
-          eventId: event._id,
-          eventName: event.title,
-          eventDate: event.date || "TBA",
-          eventLocation: event.location || "TBA",
-          price: event.price || 499,
-        },
-      });
-    }, 2000);
+    navigate("/payment", {
+      state: {
+        eventId: event._id,
+        eventName: event.title,
+        eventDate: event.date || "TBA",
+        eventLocation: event.location || "TBA",
+        price: event.price || 499,
+      },
+    });
   };
 
   const deleteEvent = async (id) => {
@@ -105,55 +95,6 @@ const BrowseEvents = () => {
           Browse Events
         </h2>
 
-        {/* SUCCESS POPUP */}
-        {showPopup && (
-          <div
-            className="fixed top-6 right-6 z-50
-                       bg-green-600/90 backdrop-blur-md
-                       text-orange-50 px-6 py-3 rounded-xl shadow-xl
-                       transition-all duration-500 animate-pulse"
-          >
-            Event booked successfully ✅
-          </div>
-        )}
-
-        {/* BOOKED EVENTS SIDE PANEL */}
-        <div
-          className={`fixed top-0 right-0 h-full w-80 z-40
-          bg-beige-100/90 backdrop-blur-xl shadow-2xl p-6
-          transition-transform duration-500 ease-in-out
-          ${showPanel ? "translate-x-0" : "translate-x-full"}`}
-        >
-          <h3 className="text-xl font-bold mb-6 text-orange-200">
-            Booked Events
-          </h3>
-
-          {bookedEvents.length === 0 ? (
-            <p className="text-black/60 italic">No events booked yet</p>
-          ) : (
-            <ul className="space-y-3">
-              {bookedEvents.map((e) => (
-                <li
-                  key={e._id}
-                  className="border border-black/10 p-3 rounded-lg
-                             bg-beige-50 text-orange-300
-                             hover:shadow-md transition"
-                >
-                  {e.title}
-                </li>
-              ))}
-            </ul>
-          )}
-
-          <button
-            onClick={() => setShowPanel(false)}
-            className="mt-8 w-full bg-black text-orange-50 py-2 rounded-lg
-                       hover:bg-orange-200 hover:text-black
-                       transition-all duration-300"
-          >
-            Close
-          </button>
-        </div>
 
         {/* EVENTS GRID */}
         <div

@@ -7,6 +7,7 @@ import BrowseEvents from "./Pages/BrowseEvents";
 import CreateEvent from "./Pages/CreateEvent";
 import Booking from "./Pages/Booking";
 import Payment from "./Pages/Payment";
+import MyEvents from "./Pages/MyEvents";
 
 import AdminDashboard from "./Dashboards/AdminDashboard";
 import UserDashboard from "./Dashboards/UserDashboard";
@@ -43,6 +44,7 @@ const App = () => {
         <Route path="/create" element={<CreateEvent />} />
         <Route path="/booking" element={<Booking />} />
         <Route path="/payment" element={<Payment />} />
+        <Route path="/myevents" element={<MyEvents />} />
       </Routes>
 
       {token && <Footer />}

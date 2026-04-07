@@ -32,6 +32,16 @@ const Header = () => {
           Events
         </Link>
 
+        {/* Show My Events only for logged-in non-admin users */}
+        {role === "user" && (
+          <Link
+            to="/myevents"
+            className="text-orange-50 hover:text-orange-300 transition-colors duration-200"
+          >
+            My Events
+          </Link>
+        )}
+
         {/* Show Create Event only if role is admin */}
         {role === "admin" && (
           <Link
