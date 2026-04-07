@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 
 import Login from "./Pages/Login";
 import Signup from "./Pages/Signup";
@@ -15,12 +15,14 @@ import UserDashboard from "./Dashboards/UserDashboard";
 import Header from "./Components/Header";
 import Footer from "./Components/Footer";
 
-const App = () => {
+// Inner layout re-reads localStorage on every route change via useLocation
+const AppLayout = () => {
+  useLocation(); // triggers re-render on every navigation
   const token = localStorage.getItem("token");
   const role = localStorage.getItem("role");
 
   return (
-    <BrowserRouter>
+    <>
       {token && <Header />}
 
       <Routes>
@@ -48,8 +50,14 @@ const App = () => {
       </Routes>
 
       {token && <Footer />}
-    </BrowserRouter>
+    </>
   );
 };
+
+const App = () => (
+  <BrowserRouter>
+    <AppLayout />
+  </BrowserRouter>
+);
 
 export default App;
