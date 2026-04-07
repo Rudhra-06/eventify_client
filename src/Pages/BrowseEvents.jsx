@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import browseBg from "../assets/browsebg.png"; 
+import browseBg from "../assets/browsebg.png";
 
 const BrowseEvents = () => {
   const role = localStorage.getItem("role");
+  const navigate = useNavigate();
 
   const [events, setEvents] = useState([]);
   const [bookedEvents, setBookedEvents] = useState([]);
@@ -31,7 +33,18 @@ const BrowseEvents = () => {
     setShowPopup(true);
     setShowPanel(true);
 
-    setTimeout(() => setShowPopup(false), 2000);
+    setTimeout(() => {
+      setShowPopup(false);
+      navigate("/payment", {
+        state: {
+          eventId: event._id,
+          eventName: event.title,
+          eventDate: event.date || "TBA",
+          eventLocation: event.location || "TBA",
+          price: event.price || 499,
+        },
+      });
+    }, 2000);
   };
 
   const deleteEvent = async (id) => {
